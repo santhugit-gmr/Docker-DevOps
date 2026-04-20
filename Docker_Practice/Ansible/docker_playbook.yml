@@ -1,0 +1,41 @@
+---
+- name: Install and Configure Docker on AWS Linux
+  hosts: all
+  become: true
+
+  vars:
+    docker_user: ec2-user   # default AWS user (change if needed)
+
+  tasks:
+
+    - name: Install Docker on Amazon Linux 2
+      command: amazon-linux-extras install docker -y
+      args:
+        creates: /usr/bin/docker
+      when: ansible_distribution == "Amazon" and ansible_distribution_major_version == "2"
+
+    - name: Install Docker on Amazon Linux 2023
+      dnf:
+        name: docker
+        state: present
+      when: ansible_distribution == "Amazon" and ansible_distribution_major_version == "2023"
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Ensure docker group exists
+      group:
+        name: docker
+        state: present
+
+    - name: Add user to docker group
+      user:
+        name: "{{ docker_user }}"
+        groups: docker
+        append: yes
+
+    - name: Reset SSH connection to apply group changes
+      meta: reset_connection
