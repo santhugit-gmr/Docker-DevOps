@@ -1,6 +1,6 @@
 FROM node:18
 
-WORKDIR /App
+WORKDIR /app
 
 COPY app.js .
 
