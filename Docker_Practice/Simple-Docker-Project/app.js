@@ -7,7 +7,7 @@ const port = 3000;
 mongoose.connect("mongodb://mongo:27017/test");
 
 app.get("/", (req, res) => {
-  res.send("App + MongoDB working 🚀");
+  res.send("App + MongoDB working - Santhosh🚀");
 });
 
 app.listen(port, () => {
